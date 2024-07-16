@@ -333,6 +333,7 @@ end
 
 function guardhelper:za_func()
 
+    guardhelper:actions_around_enemies()
     -- I am the defense target
     if ateam.my_id == self.guardId then
       if gmcp.char.info.guild_occ == "Legionista" then
@@ -369,6 +370,19 @@ function guardhelper:za_func()
     end
 end
 
+function guardhelper:actions_around_enemies()
+  if ateam.release_guards then
+    for k, v in pairs(gmcp.objects.nums) do
+      if scripts.people.bind_enemies[ateam.objs[v].desc] then
+          ateam.release_guards = false
+          scripts:print_log("Ok, nie bede puszczal zaslon")
+          raiseEvent("switchReleasingGuards", ateam.release_guards)
+          return
+      end
+    end
+  end
+end
+
 function guardhelper:find_best_attacker(defence_target)
 
   for k, v in pairs(gmcp.objects.nums) do
@@ -382,6 +396,7 @@ function guardhelper:find_best_attacker(defence_target)
         return v
     end
   end
+--/puszczaj_zaslony
 
   -- if you are still here, just defend anyone
   return 0
@@ -438,6 +453,7 @@ function guardhelper:init()
     cecho("<gray>|  - cofanie sie legionisty                                  <gray>|<reset>\n")
     cecho("<gray>|  - kolorowanie cooldownow jako tlo okna walki              <gray>|<reset>\n")
     cecho("<gray>|  - respektowane flagi atakow i sciaganie zaslon mudleta    <gray>|<reset>\n")
+    cecho("<gray>|  - wylaczanie automatycznego sciagania zaslon w PVP        <gray>|<reset>\n")
     cecho("<gray>|                                                            <gray>|<reset>\n")
     cecho("<gray>|  <yellow>Wszystkie opcje true/false                                <gray>|<reset>\n")
     cecho("<gray>|  <light_slate_blue>                                                          <gray>|<reset>\n")
